@@ -1,12 +1,14 @@
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhoneDbService } from '../../services/phone-db';
 import { Phone } from '../../models/phone';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-phone-details',
-  imports: [NgIf],
+  standalone: true,
+  imports: [NgIf, AsyncPipe],
   templateUrl: './phone-details.component.html',
   styleUrl: './phone-details.component.css',
 })
@@ -15,7 +17,7 @@ export class PhoneDetailsComponent implements OnInit {
   private _router: Router = inject(Router);
   private _phoneService = inject(PhoneDbService);
 
-  public phone: Phone | null = null;
+  public phone$: Observable<Phone | null> = of(null);
 
   ngOnInit(): void {
     this.getPhone();
@@ -25,15 +27,11 @@ export class PhoneDetailsComponent implements OnInit {
     const phoneId = this._route.snapshot.paramMap.get('phoneId');
 
     if (phoneId) {
-      this._phoneService.getPhone(phoneId).subscribe((phoneData) => {
-        this.phone = phoneData;
-      });
+      this.phone$ = this._phoneService.getPhone(phoneId);
     }
   }
 
-  onEdit() {
-    if (this.phone) {
-      this._router.navigate(['/edit', this.phone.id]);
-    }
+  onEdit(phone: Phone) {
+    this._router.navigate(['/edit', phone.id]);
   }
 }

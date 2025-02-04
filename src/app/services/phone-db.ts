@@ -76,11 +76,6 @@ export class PhoneDbService {
     return wasSuccessful;
   }
 
-  public getPhones(): Observable<Phone[]> {
-    const phonesArray = this.phoneDb ? Object.values(this.phoneDb) : [];
-    return of(phonesArray);
-  }
-
   public getPhone(id: string | null): Observable<Phone | null> {
     let phone: Phone | null = null;
     if (id && this.phoneDb) {

@@ -1,23 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PhoneCardComponent } from '../phone-card/phone-card.component';
-import { NgFor } from '@angular/common';
+import { AsyncPipe, NgFor } from '@angular/common';
 import { PhoneDbService } from '../../services/phone-db';
 import { Phone } from '../../models/phone';
+import { map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-phones',
-  imports: [PhoneCardComponent, NgFor],
+  imports: [PhoneCardComponent, NgFor, AsyncPipe],
   templateUrl: './phones.component.html',
   styleUrl: './phones.component.css',
 })
 export class PhonesComponent {
   private _phoneService = inject(PhoneDbService);
 
-  public phones: Phone[] = [] as Phone[];
-
-  ngOnInit(): void {
-    this._phoneService.getPhones().subscribe((phoneData: Phone[]) => {
-      this.phones = phoneData;
-    });
-  }
+  public phones$: Observable<Phone[]> = this._phoneService
+    .loadDb()
+    .pipe(map((phoneDb) => Object.values(phoneDb as Record<string, Phone>)));
 }

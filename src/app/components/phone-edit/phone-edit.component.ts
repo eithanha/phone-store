@@ -5,6 +5,7 @@ import { PhoneDbService } from '../../services/phone-db';
 import { Phone } from '../../models/phone';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { timeout } from 'rxjs';
 @Component({
   selector: 'app-phone-edit',
   imports: [FormsModule, CommonModule],
@@ -36,12 +37,19 @@ export class PhoneEditComponent implements OnInit {
     if (this.phone) {
       const success = this._phoneService.updatePhone(this.phone);
       if (success) {
-        Swal.fire('Success', 'Update Successfully Saved', 'success');
+        Swal.fire({
+          title: 'Success!!',
+          text: 'Update Successfully Saved',
+          icon: 'success',
+          confirmButtonText: 'Okay',
+          confirmButtonColor: 'blue',
+        }).then(() => {
+          this._router.navigate(['/phones']);
+        });
       } else {
         Swal.fire('Error', 'Update Failed', 'error');
       }
     }
-    this._router.navigate(['/phones']);
   }
 
   cancelEdit() {

@@ -1,4 +1,4 @@
-<div *ngIf="phone" class="w-full">
+<div *ngIf="phone$ | async as phone" class="w-full">
   <div class="text-center py-10">
     <h1 class="text-5xl font-bold my-4">{{ phone.brand }} {{ phone.model }}</h1>
     <h2 class="text-3xl">
@@ -13,7 +13,7 @@
   <div class="text-center mt-4">
     <button
       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-      (click)="onEdit()"
+      (click)="onEdit(phone)"
     >
       Edit
     </button>
