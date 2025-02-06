@@ -5,7 +5,7 @@ import { PhoneDbService } from '../../services/phone-db';
 import { Phone } from '../../models/phone';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { timeout } from 'rxjs';
+
 @Component({
   selector: 'app-phone-edit',
   imports: [FormsModule, CommonModule],
